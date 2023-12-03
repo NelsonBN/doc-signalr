@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Demo</title>
+    </head>
+    <body>
+        <button id="btnDownload">Download</button>
+        <button id="btnUpload">Upload</button>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+        <script>
+            let connection = new signalR.HubConnectionBuilder()
+                .withUrl("http://localhost:8080/stream")
+                .withAutomaticReconnect()
+                .configureLogging(signalR.LogLevel.Information)
+                .build();
+
+            connection
+                .start()
+                .then(() => console.log("[SIGNALR] Connected to server"));
+
+
+            document
+                .getElementById("btnDownload")
+                .addEventListener("click", () => {
+
+                    connection.stream("Download", { count: 10, message: `My message at: ${new Date().toISOString()}` })
+                        .subscribe({
+                            next: (item) => console.log('[ITEM]', item),
+                            complete: () => console.debug("[SIGNALR] Download complete"),
+                            error: (error) => console.error("[ERROR]", error)
+                        });
+
+                });
+
+            document
+                .getElementById("btnUpload")
+                .addEventListener("click", () => {
+
+                    const subject = new signalR.Subject();
+                    connection.send("Upload", subject);
+
+                    const now = new Date().toISOString();
+                    let i = 0;
+
+                    const iId = setInterval(() => {
+
+                        subject.next({ count: i++, message: `My message at: ${now}` });
+
+                        if (i === 10) {
+                            clearInterval(iId);
+                            subject.complete();
+                        }
+
+                    }, 250);
+                });
+        </script>
+    </body>
+</html>
