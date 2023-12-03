@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo.WebClient", "Demo.WebClient", "{6B5E6203-5BB8-4E20-9704-443BF23C59E4}"
+	ProjectSection(SolutionItems) = preProject
+		src\1.Overview\Demo.WebClient\index.html = src\1.Overview\Demo.WebClient\index.html
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.Overview", "1.Overview", "{562C72EF-5215-44D8-9F58-9CB56979FAF0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Api", "src\1.Overview\Demo.Api\Demo.Api.csproj", "{EDAD86F5-532E-46E6-98FE-EA2F4C85E2AE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EDAD86F5-532E-46E6-98FE-EA2F4C85E2AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDAD86F5-532E-46E6-98FE-EA2F4C85E2AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDAD86F5-532E-46E6-98FE-EA2F4C85E2AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDAD86F5-532E-46E6-98FE-EA2F4C85E2AE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6B5E6203-5BB8-4E20-9704-443BF23C59E4} = {562C72EF-5215-44D8-9F58-9CB56979FAF0}
+		{EDAD86F5-532E-46E6-98FE-EA2F4C85E2AE} = {562C72EF-5215-44D8-9F58-9CB56979FAF0}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6006BEEB-F5CD-4B0B-8092-321BD632ABB2}
+	EndGlobalSection
+EndGlobal

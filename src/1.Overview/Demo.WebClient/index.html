@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Demo</title>
+    </head>
+    <body>
+
+        <div>
+            <label>To server:</label>
+            <input id="toServer" type="text" />
+            <button id="sendButton">Send</button>
+        </div>
+
+        <div>
+            <label>From server:</label>
+            <input id="fromServer" type="text" />
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+        <script>
+            let connection = new signalR.HubConnectionBuilder()
+                .withUrl("http://localhost:8080/notifications")
+                .withAutomaticReconnect([0, 1000, 5000, 10000, 30000, 60000, 120000, 300000])
+                .configureLogging(signalR.LogLevel.Information)
+                .build();
+
+            connection.on("onMessage", data => console.log('[ON MESSAGE]:', data));
+            connection.on("Notify", data => console.log('[NOTIFY]:', data));
+            connection.on("my-notify", data => console.log('[MY NOTIFY]:', data));
+
+            connection.start().then(() => {
+                console.log("[SIGNALR] Connected to server");
+
+                connection.send('Ping', "Hello from client");
+
+                httpRequest('My http call');
+            });
+
+            connection.onclose(() => console.log("[SIGNALR] Disconnected from server"));
+
+            const httpRequest = (message) => fetch('http://localhost:8080/broadcast', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(message)
+            })
+                .then(() => console.log('[FETCH] Message sent to server'))
+                .catch(err => console.error('[FETCH] Error:', err));
+
+            document.getElementById("sendButton").addEventListener("click", event => {
+                const message = document.getElementById("toServer").value;
+
+                connection
+                    .invoke('my-message', message)
+                    .then(data => {
+                        document.getElementById("fromServer").value = `"${data.fromClient}" -> "${data.createdAt}"`;
+                    });
+            });
+        </script>
+    </body>
+</html>
