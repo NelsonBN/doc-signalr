@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Demo</title>
+    </head>
+    <body>
+
+        <div>
+            <label>Message:</label>
+            <input id="message" type="text" />
+            <button id="sendButton">Send</button>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+        <script>
+            let connection = new signalR.HubConnectionBuilder()
+                .withUrl("http://localhost:8080/chat", {
+                    skipNegotiation: true,
+                    transport: signalR.HttpTransportType.WebSockets
+                })
+                .withAutomaticReconnect([0, 1000, 5000, 10000, 30000, 60000, 120000, 300000])
+                .configureLogging(signalR.LogLevel.Information)
+                .build();
+
+            connection.onclose(() => console.log("[SIGNALR] Disconnected from server"));
+
+            connection.on("onMessage", data => console.log('[CHAT]:', data));
+
+            const sendMessage = (message) => connection.send('Send', message);
+
+
+            const messageHandler = () => {
+                const message = document.getElementById("message").value;
+                document.getElementById("message").value = "";
+
+                sendMessage(message);
+            };
+
+            document.getElementById("sendButton").addEventListener("click", event => {
+                messageHandler();
+            });
+
+            document.getElementById('message').addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    messageHandler();
+                }
+            });
+
+            connection.start().then(() => {
+                console.log("[SIGNALR] Connected to server");
+            });
+        </script>
+    </body>
+</html>
