@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Demo</title>
+    </head>
+    <body>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+        <script>
+            let connection = new signalR.HubConnectionBuilder()
+                .withUrl("http://localhost:8080/my-hub")
+                .withAutomaticReconnect()
+                .configureLogging(signalR.LogLevel.Information)
+                .build();
+
+            connection.onclose(() => console.log("[SIGNALR] Disconnected from server"));
+            connection.on("Pong", data => console.log('[RETURN MESSAGE]:', data));
+
+            connection
+                .start()
+                .then(() => {
+                    console.log("[SIGNALR] Connected to server");
+
+                    connection.send('Ping', "Hello from client");
+
+                    sendMessage();
+                });
+
+            const sendMessage = () => {
+                connection.send('Ping', "Continuing to ping");
+                setTimeout(sendMessage, 1000);
+            };
+        </script>
+    </body>
+</html>

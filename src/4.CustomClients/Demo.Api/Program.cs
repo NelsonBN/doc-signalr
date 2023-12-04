@@ -1,9 +1,26 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 
-namespace Demo.Api;
+var builder = WebApplication.CreateSlimBuilder(args);
 
-[Authorize]
+builder.Services.AddSignalR();
+
+builder.Services.AddCors(options =>
+    options.AddDefaultPolicy(policy =>
+        policy.AllowAnyMethod()
+              .AllowAnyHeader()
+              .SetIsOriginAllowed(origin => true)
+              .AllowCredentials()));
+
+
+var app = builder.Build();
+
+app.UseCors();
+
+app.MapHub<MyHub>("/my-hub");
+
+await app.RunAsync();
+
+
 public class MyHub(ILogger<MyHub> Logger) : Hub
 {
     private readonly ILogger<MyHub> _logger = Logger;
@@ -33,6 +50,6 @@ public class MyHub(ILogger<MyHub> Logger) : Hub
     {
         _logger.LogInformation($"[HUB][PING] {Context.ConnectionId} pinged. {message}");
 
-        return Clients.Caller.SendAsync("Pong", $"Pong -> '{message}', At: {DateTime.UtcNow}");
+        return Clients.All.SendAsync("Pong", $"Pong -> '{message}', At: {DateTime.UtcNow}");
     }
 }
