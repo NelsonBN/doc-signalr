@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using static System.Console;
 
-WriteLine("Startining...");
+WriteLine("Starting...");
 
 var counter = 0;
 

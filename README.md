@@ -17,3 +17,8 @@ npm run serve
 ```
 npm run build
 ```
+
+#### Install SignalR client for Vue
+```bash
+npm i @microsoft/signalr@latest --save
+```
