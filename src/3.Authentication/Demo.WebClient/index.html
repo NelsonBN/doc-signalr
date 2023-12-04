@@ -32,7 +32,14 @@
                     console.log("[SIGNALR] Connected to server");
 
                     connection.send('Ping', "Hello from client");
+
+                    sendMessage();
                 });
+
+            const sendMessage = () => {
+                connection.send('Ping', "Continuing to ping");
+                setTimeout(sendMessage, 500);
+            };
         </script>
     </body>
 </html>

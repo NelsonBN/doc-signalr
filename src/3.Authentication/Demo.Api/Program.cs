@@ -15,7 +15,7 @@ const string TOKEN_TYPE = "at+jwt";
 const string HUB_ENDPOINT = "/my-hub";
 
 
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(options => options.AddFilter<AuthenticationFilter>());
 
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
@@ -106,7 +106,7 @@ app.MapGet("/login", (string username) =>
         SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512),
         Subject = claims,
         NotBefore = DateTime.UtcNow,
-        Expires = DateTime.UtcNow.AddSeconds(30),
+        Expires = DateTime.UtcNow.AddSeconds(10),
         IssuedAt = DateTime.UtcNow,
         TokenType = TOKEN_TYPE
     });

@@ -8,7 +8,7 @@ builder.Services
     .AddEndpointsApiExplorer()
     .AddSwaggerGen();
 
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(option => option.AddFilter<MyFilter>());
 
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>

@@ -60,10 +60,3 @@ public class NotificationsHub(ILogger<NotificationsHub> Logger) : Hub<INotificat
         };
     }
 }
-
-
-public record MyResponse
-{
-    public string? FromClient { get; init; }
-    public DateTime CreatedAt { get; init; }
-}
