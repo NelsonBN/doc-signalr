@@ -46,8 +46,8 @@
                 },
                 body: JSON.stringify(message)
             })
-                .then(() => console.log('[FETCH] Message sent to server'))
-                .catch(err => console.error('[FETCH] Error:', err));
+            .then(() => console.log('[FETCH] Message sent to server'))
+            .catch(err => console.error('[FETCH] Error:', err));
 
             document.getElementById("sendButton").addEventListener("click", event => {
                 const message = document.getElementById("toServer").value;

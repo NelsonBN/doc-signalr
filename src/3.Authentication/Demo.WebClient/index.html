@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Demo</title>
+    </head>
+    <body>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+        <script>
+            let connection = new signalR.HubConnectionBuilder()
+                .withUrl("http://localhost:8080/my-hub", {
+                    accessTokenFactory: async ()  => {
+
+                        const response = await fetch('http://localhost:8080/login?username=nelson');
+                        const data = await response.json();
+
+                        console.log("[AUTH]", data);
+
+                        return data.accessToke;
+                    }
+                })
+                .withAutomaticReconnect()
+                .configureLogging(signalR.LogLevel.Information)
+                .build();
+
+            connection.onclose(() => console.log("[SIGNALR] Disconnected from server"));
+            connection.on("Pong", data => console.log('[RETURN MESSAGE]:', data));
+
+            connection
+                .start()
+                .then(() => {
+                    console.log("[SIGNALR] Connected to server");
+
+                    connection.send('Ping', "Hello from client");
+                });
+        </script>
+    </body>
+</html>

@@ -32,7 +32,6 @@ public class NotificationsHub(ILogger<NotificationsHub> Logger) : Hub<INotificat
         }
         else
         {
-
             _logger.LogError($"[HUB][NOTIFICATIONS] {Context.ConnectionId} disconnected with error: {exception.Message}");
         }
 
